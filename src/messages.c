@@ -571,7 +571,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 				fail(rsp, "");
 				break;
 			}
-			close_node(trg.node);
+			close_node(trg.monitor, trg.desktop, trg.node);
 			break;
 		} else if (streq("-k", *args) || streq("--kill", *args)) {
 			if (num > 1) {
@@ -582,7 +582,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 				fail(rsp, "");
 				break;
 			}
-			kill_node(trg.monitor, trg.desktop, trg.node);
+			kill_node(trg.node);
 			changed = true;
 			break;
 		} else {
