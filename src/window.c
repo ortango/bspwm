@@ -153,7 +153,7 @@ bool manage_window(xcb_window_t win, rule_consequence_t *csq, int fd)
 	adapt_geometry(&mm->rectangle, &m->rectangle, n);
 
 	if (csq->center) {
-		window_center(m, c);
+		window_center(m, d, c);
 	}
 
 	snprintf(c->class_name, sizeof(c->class_name), "%s", csq->class_name);
@@ -846,10 +846,14 @@ void window_move_resize(xcb_window_t win, int16_t x, int16_t y, uint16_t w, uint
 	xcb_configure_window(dpy, win, XCB_CONFIG_WINDOW_X_Y_WIDTH_HEIGHT, values);
 }
 
-void window_center(monitor_t *m, client_t *c)
+void window_center(monitor_t *m, desktop_t *d, client_t *c)
 {
 	xcb_rectangle_t *r = &c->floating_rectangle;
 	xcb_rectangle_t a = m->rectangle;
+	a.x += m->padding.left + d->padding.left;
+	a.y += m->padding.top + d->padding.top;
+	a.width -= m->padding.left + d->padding.left + d->padding.right + m->padding.right;
+	a.height -= m->padding.top + d->padding.top + d->padding.bottom + m->padding.bottom;
 	if (r->width >= a.width) {
 		r->x = a.x;
 	} else {
