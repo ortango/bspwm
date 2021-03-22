@@ -1376,7 +1376,7 @@ void unlink_node(monitor_t *m, desktop_t *d, node_t *n)
 	}
 }
 
-void close_node(node_t *n)
+void close_node(monitor_t *m, desktop_t *d, node_t *n)
 {
 	if (n == NULL) {
 		return;
@@ -1386,25 +1386,26 @@ void close_node(node_t *n)
 		} else {
 			xcb_kill_client(dpy, n->id);
 		}
+	} else if (is_leaf(n)) {
+			remove_node(m, d, n);
+			arrange(m, d);
 	} else {
-		close_node(n->first_child);
-		close_node(n->second_child);
+		close_node(m, d, n->first_child);
+		close_node(m, d, n->second_child);
 	}
 }
 
-void kill_node(monitor_t *m, desktop_t *d, node_t *n)
+void kill_node(node_t *n)
 {
 	if (n == NULL) {
 		return;
 	}
-
 	for (node_t *f = first_extrema(n); f != NULL; f = next_leaf(f, n)) {
 		if (f->client != NULL) {
 			xcb_kill_client(dpy, f->id);
 		}
 	}
 
-	remove_node(m, d, n);
 }
 
 void remove_node(monitor_t *m, desktop_t *d, node_t *n)
