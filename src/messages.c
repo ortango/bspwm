@@ -516,6 +516,9 @@ void cmd_node(char **args, int num, FILE *rsp)
 				}
 			}
 			changed = true;
+		} else if (streq("-I", *args) || streq("--invert", *args)) {
+			reverse_polarity(trg.node);
+			changed = true;
 		} else if (streq("-F", *args) || streq("--flip", *args)) {
 			num--, args++;
 			if (num < 1) {

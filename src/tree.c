@@ -1226,6 +1226,19 @@ void rotate_tree_rec(node_t *n, int deg)
 	rotate_tree_rec(n->second_child, deg);
 }
 
+void reverse_polarity(node_t *n)
+{
+	if (n == NULL || is_leaf(n)) {
+		return;
+	}
+
+	node_t *tmp;
+
+	tmp = n->first_child;
+	n->first_child = n->second_child;
+	n->second_child = tmp;
+}
+
 void flip_tree(node_t *n, flip_t flp)
 {
 	if (n == NULL || is_leaf(n)) {

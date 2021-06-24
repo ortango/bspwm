@@ -78,6 +78,7 @@ int tiled_count(node_t *n, bool include_receptacles);
 void find_by_area(area_peak_t ap, coordinates_t *ref, coordinates_t *dst, node_select_t *sel);
 void rotate_tree(node_t *n, int deg);
 void rotate_tree_rec(node_t *n, int deg);
+void reverse_polarity(node_t *n);
 void flip_tree(node_t *n, flip_t flp);
 void equalize_tree(node_t *n);
 int balance_tree(node_t *n);
