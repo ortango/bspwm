@@ -275,7 +275,7 @@ void _apply_hints(xcb_window_t win, rule_consequence_t *csq)
 	xcb_size_hints_t size_hints;
 	if (xcb_icccm_get_wm_normal_hints_reply(dpy, xcb_icccm_get_wm_normal_hints(dpy, win), &size_hints, NULL) == 1) {
 		if ((size_hints.flags & (XCB_ICCCM_SIZE_HINT_P_MIN_SIZE | XCB_ICCCM_SIZE_HINT_P_MAX_SIZE)) &&
-		    size_hints.min_width == size_hints.max_width && size_hints.min_height == size_hints.max_height) {
+		    size_hints.max_height > 0 && size_hints.min_width == size_hints.max_width && size_hints.min_height == size_hints.max_height) {
 			SET_CSQ_STATE(STATE_FLOATING);
 		}
 	}
@@ -316,7 +316,9 @@ void apply_rules(xcb_window_t win, rule_consequence_t *csq)
 	_apply_window_type(win, csq);
 	_apply_window_state(win, csq);
 	_apply_transient(win, csq);
-	_apply_hints(win, csq);
+	if (honor_size_hints) {
+		_apply_hints(win, csq);
+	}
 	_apply_class(win, csq);
 	_apply_name(win, csq);
 
