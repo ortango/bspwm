@@ -443,6 +443,9 @@ Commands
 *-R*, *--rotate* '90|270|180'::
 	Rotate the tree rooted at the selected node.
 
+*-I*, *--invert*::
+    Swap children of a selected node
+
 *-F*, *--flip* 'horizontal|vertical'::
 	Flip the tree rooted at selected node.
 
