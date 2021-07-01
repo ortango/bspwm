@@ -182,7 +182,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 					follow = true;
 					num--, args++;
 				}
-				if (transfer_node(trg.monitor, trg.desktop, trg.node, dst.monitor, dst.desktop, dst.desktop->focus, follow)) {
+				if (trg.desktop != dst.desktop && transfer_node(trg.monitor, trg.desktop, trg.node, dst.monitor, dst.desktop, dst.desktop->focus, follow)) {
 					trg.monitor = dst.monitor;
 					trg.desktop = dst.desktop;
 				} else {
@@ -207,7 +207,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 					follow = true;
 					num--, args++;
 				}
-				if (transfer_node(trg.monitor, trg.desktop, trg.node, dst.monitor, dst.monitor->desk, dst.monitor->desk->focus, follow)) {
+				if (trg.monitor != dst.monitor && transfer_node(trg.monitor, trg.desktop, trg.node, dst.monitor, dst.monitor->desk, dst.monitor->desk->focus, follow)) {
 					trg.monitor = dst.monitor;
 					trg.desktop = dst.monitor->desk;
 				} else {
