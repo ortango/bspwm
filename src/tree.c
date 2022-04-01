@@ -128,7 +128,7 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 			n->client->tiled_rectangle = r;
 		}
 
-		apply_size_hints(n->client, &r.width, &r.height, false);
+		apply_size_hints(n->client, &r.width, &r.height);
 
 		if (!rect_eq(r, cr)) {
 			window_move_resize(n->id, r.x, r.y, r.width, r.height);

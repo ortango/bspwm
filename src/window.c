@@ -591,9 +591,7 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 		arrange(loc->monitor, loc->desktop);
 	} else {
 		int w = width, h = height;
-		bool grow = false;
 		if (relative) {
-			grow = (honor_size_hints && (rh & HANDLE_RIGHT || rh & HANDLE_BOTTOM));
 			w += dx * (rh & HANDLE_LEFT ? -1 : (rh & HANDLE_RIGHT ? 1 : 0));
 			h += dy * (rh & HANDLE_TOP ? -1 : (rh & HANDLE_BOTTOM ? 1 : 0));
 		} else {
@@ -610,7 +608,7 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 		}
 		width = MAX(1, w);
 		height = MAX(1, h);
-		apply_size_hints(n->client, &width, &height, grow);
+		apply_size_hints(n->client, &width, &height);
 		if (rh & HANDLE_LEFT) {
 			x += rect.width - width;
 		}
@@ -620,6 +618,7 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 		n->client->floating_rectangle = (xcb_rectangle_t) {x, y, width, height};
 		if (n->client->state == STATE_FLOATING) {
 			window_move_resize(n->id, x, y, width, height);
+
 			if (!grabbing) {
 				put_status(SBSC_MASK_NODE_GEOMETRY, "node_geometry 0x%08X 0x%08X 0x%08X %ux%u+%i+%i\n", loc->monitor->id, loc->desktop->id, loc->node->id, width, height, x, y);
 			}
@@ -631,7 +630,7 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 }
 
 /* taken from awesomeWM */
-void apply_size_hints(client_t *c, uint16_t *width, uint16_t *height, bool grow)
+void apply_size_hints(client_t *c, uint16_t *width, uint16_t *height)
 {
 	if (!honor_size_hints) {
 		return;
@@ -718,15 +717,8 @@ void apply_size_hints(client_t *c, uint16_t *width, uint16_t *height, bool grow)
 		uint16_t t1 = *width, t2 = *height;
 		unsigned_subtract(t1, basew);
 		unsigned_subtract(t2, baseh);
-		uint16_t r1 = t1 % c->size_hints.width_inc;
-		uint16_t r2 = t2 % c->size_hints.height_inc;
-		if (grow) {
-			*width += (r1 != 0 ? (c->size_hints.width_inc - r1) : 0);
-			*height += (r2 != 0 ? (c->size_hints.height_inc - r2) : 0);
-		} else {
-			*width -= r1;
-			*height -= r2;
-		}
+		*width -= t1 % c->size_hints.width_inc;
+		*height -= t2 % c->size_hints.height_inc;
 	}
 }
 
