@@ -67,7 +67,9 @@ void update_root(monitor_t *m, xcb_rectangle_t *rect)
 {
 	xcb_rectangle_t last_rect = m->rectangle;
 	m->rectangle = *rect;
+	bool is_new_monitor = false;
 	if (m->root == XCB_NONE) {
+		is_new_monitor = true;
 		uint32_t values[] = {XCB_EVENT_MASK_ENTER_WINDOW};
 		m->root = xcb_generate_id(dpy);
 		xcb_create_window(dpy, XCB_COPY_FROM_PARENT, m->root, root,
@@ -93,7 +95,9 @@ void update_root(monitor_t *m, xcb_rectangle_t *rect)
 		}
 		arrange(m, d);
 	}
-	reorder_monitor(m);
+	if (is_new_monitor) {
+		reorder_monitor(m);
+	}
 }
 
 void reorder_monitor(monitor_t *m)
