@@ -949,6 +949,7 @@ void cmd_monitor(char **args, int num, FILE *rsp)
 			xcb_rectangle_t r;
 			if (parse_rectangle(*args, &r)) {
 				update_root(trg.monitor, &r);
+				reorder_monitor(trg.monitor);
 			} else {
 				fail(rsp, "monitor %s: Invalid argument: '%s'.\n", *(args - 1), *args);
 				return;
