@@ -444,9 +444,9 @@ void cmd_node(char **args, int num, FILE *rsp)
 					if (sscanf(*args, "%i", &dy) == 1) {
 						if (honor_size_hints && trg.node->client != NULL &&
 						    trg.node->client->size_hints.flags & (XCB_ICCCM_SIZE_HINT_P_RESIZE_INC | XCB_ICCCM_SIZE_HINT_BASE_SIZE)) {
-							if (dx != 0)
+							if (dx != 0 && abs(dx) < trg.node->client->size_hints.width_inc)
 								dx = trg.node->client->size_hints.width_inc * (abs(dx) / dx);
-							if (dy != 0)
+							if (dy != 0 && abs(dy) < trg.node->client->size_hints.height_inc)
 								dy = trg.node->client->size_hints.height_inc * (abs(dy) / dy);
 						}
 						if (!resize_client(&trg, rh, dx, dy, true)) {
