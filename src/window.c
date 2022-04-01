@@ -593,6 +593,10 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 		int w = width, h = height;
 		bool grow = false;
 		if (relative) {
+			//nope.
+			//check if HANDLES valued * d{x,y} is >0
+			//addition after i guess.
+			//wait... you can shrink + grow in one command. this will not work out.
 			grow = (honor_size_hints && (rh & HANDLE_RIGHT || rh & HANDLE_BOTTOM));
 			w += dx * (rh & HANDLE_LEFT ? -1 : (rh & HANDLE_RIGHT ? 1 : 0));
 			h += dy * (rh & HANDLE_TOP ? -1 : (rh & HANDLE_BOTTOM ? 1 : 0));
