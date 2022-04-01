@@ -51,7 +51,7 @@ void initialize_floating_rectangle(node_t *n);
 xcb_rectangle_t get_window_rectangle(node_t *n);
 bool move_client(coordinates_t *loc, int dx, int dy);
 bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool relative);
-void apply_size_hints(client_t *c, uint16_t *width, uint16_t *height);
+void apply_size_hints(client_t *c, uint16_t *width, uint16_t *height, bool grow);
 void query_pointer(xcb_window_t *win, xcb_point_t *pt);
 void update_motion_recorder(void);
 void enable_motion_recorder(xcb_window_t win);

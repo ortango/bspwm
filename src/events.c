@@ -166,7 +166,7 @@ void configure_request(xcb_generic_event_t *evt)
 			height = e->height;
 		}
 
-		apply_size_hints(c, &width, &height);
+		apply_size_hints(c, &width, &height, false);
 		c->floating_rectangle.width = width;
 		c->floating_rectangle.height = height;
 		xcb_rectangle_t r = c->floating_rectangle;
@@ -189,7 +189,7 @@ void configure_request(xcb_generic_event_t *evt)
 			if (e->value_mask & XCB_CONFIG_WINDOW_HEIGHT) {
 				height = e->height;
 			}
-			apply_size_hints(c, &width, &height);
+			apply_size_hints(c, &width, &height, false);
 			if (width != c->floating_rectangle.width || height != c->floating_rectangle.height) {
 				c->floating_rectangle.width = width;
 				c->floating_rectangle.height = height;
