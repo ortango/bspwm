@@ -443,6 +443,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 					num--, args++;
 					if (sscanf(*args, "%i", &dy) == 1) {
 						if (honor_size_hints && trg.node->client != NULL &&
+						    trg.node->client->state != STATE_TILED &&
 						    trg.node->client->size_hints.flags & (XCB_ICCCM_SIZE_HINT_P_RESIZE_INC | XCB_ICCCM_SIZE_HINT_BASE_SIZE)) {
 							if (dx != 0)
 								dx = trg.node->client->size_hints.width_inc * (abs(dx) / dx);
