@@ -354,7 +354,7 @@ node_t *insert_node(monitor_t *m, desktop_t *d, node_t *n, node_t *f)
 					c->first_child = f;
 					c->second_child = n;
 				}
-				if (p == NULL || (automatic_scheme == SCHEME_LONGEST_SIDE && d->user_layout == LAYOUT_TILED) || single_tiled) {
+				if (p == NULL || single_tiled || (automatic_scheme == SCHEME_LONGEST_SIDE && d->user_layout == LAYOUT_TILED && !IS_FULLSCREEN(c))) {
 					if (f->rectangle.width > f->rectangle.height) {
 						c->split_type = TYPE_VERTICAL;
 					} else {
