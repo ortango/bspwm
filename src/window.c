@@ -615,10 +615,9 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 		if (rh & HANDLE_TOP) {
 			y += rect.height - height;
 		}
-		n->client->floating_rectangle = (xcb_rectangle_t) {x, y, width, height};
 		if (n->client->state == STATE_FLOATING) {
+			n->client->floating_rectangle = (xcb_rectangle_t) {x, y, width, height};
 			window_move_resize(n->id, x, y, width, height);
-
 			if (!grabbing) {
 				put_status(SBSC_MASK_NODE_GEOMETRY, "node_geometry 0x%08X 0x%08X 0x%08X %ux%u+%i+%i\n", loc->monitor->id, loc->desktop->id, loc->node->id, width, height, x, y);
 			}
