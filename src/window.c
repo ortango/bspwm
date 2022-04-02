@@ -596,11 +596,11 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 			dy *= rh & HANDLE_TOP ? -1 : (rh & HANDLE_BOTTOM ? 1 : 0);
 			w += dx;
 			h += dy;
-			if (honor_size_hints &&
-			    n->client->size_hints.flags & (XCB_ICCCM_SIZE_HINT_P_RESIZE_INC | XCB_ICCCM_SIZE_HINT_BASE_SIZE)) {
-				//hail satan. 665. i hope _inc isn't 0 in some cases :-)
-				w += dx > 0 ? (n->client->size_hints.width_inc - 1) : 0;
-				h += dy > 0 ? (n->client->size_hints.height_inc - 1) : 0;
+			/*the conditional below should only be hit when the window is floating or pseudo_tiled with
+			  honor_size_hints. the idea is to just add a little extra that will be trimmed off later.*/
+			if (honor_size_hints && n->client->size_hints.flags & (XCB_ICCCM_SIZE_HINT_P_RESIZE_INC | XCB_ICCCM_SIZE_HINT_BASE_SIZE)) {
+				w += (dx > 0 && n->client->size_hints.width_inc > 0) ? (n->client->size_hints.width_inc - 1) : 0;
+				h += (dy > 0 && n->client->size_hints.height_inc > 0) ? (n->client->size_hints.height_inc - 1) : 0;
 			}
 		} else {
 			if (rh & HANDLE_LEFT) {
