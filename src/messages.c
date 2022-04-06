@@ -511,7 +511,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 				}
 			} else {
 				double rat;
-				if (sscanf(*args, "%lf", &rat) == 1 && rat > 0 && rat < 1) {
+				if (sscanf(*args, "%lf", &rat) == 1 && rat > 0 && rat <= 1) {
 					set_ratio(trg.node, rat);
 				} else {
 					fail(rsp, "node %s: Invalid argument: '%s'.\n", *(args - 1), *args);

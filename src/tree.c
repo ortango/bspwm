@@ -67,10 +67,10 @@ void arrange(monitor_t *m, desktop_t *d)
 		rect.height -= d->window_gap;
 	}
 
-	apply_layout(m, d, d->root, rect, rect);
+	apply_layout(m, d, d->root, rect, rect, false);
 }
 
-void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, xcb_rectangle_t root_rect)
+void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, xcb_rectangle_t root_rect, bool collapse)
 {
 	if (n == NULL) {
 		return;
@@ -143,7 +143,8 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 		xcb_rectangle_t first_rect;
 		xcb_rectangle_t second_rect;
 
-		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant) {
+		collapse = n->split_ratio == 1 ? true : collapse;
+		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant || collapse) {
 			first_rect = second_rect = rect;
 		} else {
 			unsigned int fence;
@@ -176,8 +177,8 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 			}
 		}
 
-		apply_layout(m, d, n->first_child, first_rect, root_rect);
-		apply_layout(m, d, n->second_child, second_rect, root_rect);
+		apply_layout(m, d, n->first_child, first_rect, root_rect, collapse);
+		apply_layout(m, d, n->second_child, second_rect, root_rect, collapse);
 	}
 }
 
@@ -1213,7 +1214,7 @@ void rotate_tree_rec(node_t *n, int deg)
 		tmp = n->first_child;
 		n->first_child = n->second_child;
 		n->second_child = tmp;
-		n->split_ratio = 1.0 - n->split_ratio;
+		n->split_ratio = n->split_ratio == 1 ? 1.0 : 1.0 - n->split_ratio;
 	}
 
 	if (deg != 180) {
@@ -1254,7 +1255,7 @@ void flip_tree(node_t *n, flip_t flp)
 		tmp = n->first_child;
 		n->first_child = n->second_child;
 		n->second_child = tmp;
-		n->split_ratio = 1.0 - n->split_ratio;
+		n->split_ratio = n->split_ratio == 1 ? 1.0 : 1.0 - n->split_ratio;
 	}
 
 	flip_tree(n->first_child, flp);
