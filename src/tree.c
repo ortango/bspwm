@@ -143,7 +143,7 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 		xcb_rectangle_t first_rect;
 		xcb_rectangle_t second_rect;
 
-		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant) {
+		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant || n->collapsed) {
 			first_rect = second_rect = rect;
 		} else {
 			unsigned int fence;
@@ -2033,6 +2033,7 @@ void propagate_flags_upward(monitor_t *m, desktop_t *d, node_t *n)
 	if (p != NULL) {
 		set_vacant_local(m, d, p, (p->first_child->vacant && p->second_child->vacant));
 		set_hidden_local(m, d, p, (p->first_child->hidden && p->second_child->hidden));
+        set_collapsed_local(m, d, p, (p->first_child->hidden && p->second_child->hidden));
 		update_constraints(p);
 	}
 
@@ -2125,6 +2126,54 @@ void propagate_hidden_upward(monitor_t *m, desktop_t *d, node_t *n)
 	}
 
 	propagate_hidden_upward(m, d, p);
+}
+
+void set_collapsed(monitor_t *m, desktop_t *d, node_t *n, bool value)
+{
+    if (n == NULL || n->collapsed == value) {
+        return;
+    }
+
+    put_status(SBSC_MASK_NODE_FLAG, "node_flag 0x%08X 0x%08X 0x%08X collapsed %s\n", m->id, d->id, n->id, ON_OFF_STR(value));
+
+    propagate_collapsed_downward(m, d, n, value);
+    propagate_collapsed_upward(m, d, n);
+}
+
+void set_collapsed_local(monitor_t *m, desktop_t *d, node_t *n, bool value)
+{
+	if (n == NULL || n->collapsed == value) {
+		return;
+	}
+
+	n->collapsed = value;
+}
+
+void propagate_collapsed_downward(monitor_t *m, desktop_t *d, node_t *n, bool value)
+{
+    if (n == NULL) {
+        return;
+    }
+
+    set_collapsed_local(m, d, n, value);
+
+    propagate_collapsed_downward(m, d, n->first_child, value);
+    propagate_collapsed_downward(m, d, n->second_child, value);
+}
+
+void propagate_collapsed_upward(monitor_t *m, desktop_t *d, node_t *n)
+{
+    if (n == NULL) {
+        return;
+    }
+
+    node_t *p = n->parent;
+
+    if (p != NULL && (is_leaf(p->first_child) || is_leaf(p->second_child))) {
+        set_collapsed_local(m, d, p, (p->first_child->collapsed && p->second_child->collapsed));
+    }
+
+    propagate_collapsed_upward(m, d, p);
 }
 
 void set_sticky(monitor_t *m, desktop_t *d, node_t *n, bool value)
