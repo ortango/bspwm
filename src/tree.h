@@ -108,6 +108,7 @@ void set_hidden(monitor_t *m, desktop_t *d, node_t *n, bool value);
 void set_hidden_local(monitor_t *m, desktop_t *d, node_t *n, bool value);
 void propagate_hidden_downward(monitor_t *m, desktop_t *d, node_t *n, bool value);
 void propagate_hidden_upward(monitor_t *m, desktop_t *d, node_t *n);
+void set_collapsed(monitor_t *m, desktop_t *d, node_t *n, bool value);
 void set_sticky(monitor_t *m, desktop_t *d, node_t *n, bool value);
 void set_private(monitor_t *m, desktop_t *d, node_t *n, bool value);
 void set_locked(monitor_t *m, desktop_t *d, node_t *n, bool value);
