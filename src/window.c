@@ -304,21 +304,23 @@ void draw_presel_feedback(monitor_t *m, desktop_t *d, node_t *n)
 	rect.height -= gap;
 	xcb_rectangle_t presel_rect = rect;
 
-	switch (p->split_dir) {
-		case DIR_NORTH:
-			presel_rect.height = p->split_ratio * rect.height;
-			break;
-		case DIR_EAST:
-			presel_rect.width = (1 - p->split_ratio) * rect.width;
-			presel_rect.x = rect.width - presel_rect.width;
-			break;
-		case DIR_SOUTH:
-			presel_rect.height = (1 - p->split_ratio) * rect.height;
-			presel_rect.y = rect.height - presel_rect.height;
-			break;
-		case DIR_WEST:
-			presel_rect.width = p->split_ratio * rect.width;
-			break;
+	if (p->split_ratio != 1) {
+		switch (p->split_dir) {
+			case DIR_NORTH:
+				presel_rect.height = p->split_ratio * rect.height;
+				break;
+			case DIR_EAST:
+				presel_rect.width = (1 - p->split_ratio) * rect.width;
+				presel_rect.x = rect.width - presel_rect.width;
+				break;
+			case DIR_SOUTH:
+				presel_rect.height = (1 - p->split_ratio) * rect.height;
+				presel_rect.y = rect.height - presel_rect.height;
+				break;
+			case DIR_WEST:
+				presel_rect.width = p->split_ratio * rect.width;
+				break;
+		}
 	}
 
 	window_move_resize(p->feedback, n->rectangle.x + presel_rect.x, n->rectangle.y + presel_rect.y,
