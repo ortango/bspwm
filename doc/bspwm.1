@@ -2,12 +2,12 @@
 .\"     Title: bspwm
 .\"    Author: [see the "Author" section]
 .\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
-.\"      Date: 02/15/2022
+.\"      Date: 04/06/2022
 .\"    Manual: Bspwm Manual
-.\"    Source: Bspwm 0.9.10-34-g3403bb2
+.\"    Source: Bspwm 0.9.10-93-g7d1e69d
 .\"  Language: English
 .\"
-.TH "BSPWM" "1" "02/15/2022" "Bspwm 0\&.9\&.10\-34\-g3403bb2" "Bspwm Manual"
+.TH "BSPWM" "1" "04/06/2022" "Bspwm 0\&.9\&.10\-93\-g7d1e69d" "Bspwm Manual"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -108,7 +108,7 @@ NODE_SEL := [NODE_SEL#](DIR|CYCLE_DIR|PATH|any|first_ancestor|last|newest|
 
 STATE := tiled|pseudo_tiled|floating|fullscreen
 
-FLAG := hidden|sticky|private|locked|marked|urgent
+FLAG := hidden|collapsed|sticky|private|locked|marked|urgent
 
 LAYER := below|normal|above
 
@@ -301,7 +301,7 @@ Only consider nodes that are descendants of the reference node\&.
 Only consider nodes that are ancestors of the reference node\&.
 .RE
 .PP
-[!](hidden|sticky|private|locked|marked|urgent)
+[!](hidden|collapsed|sticky|private|locked|marked|urgent)
 .RS 4
 Only consider windows that have the given flag set\&.
 .RE
@@ -576,6 +576,11 @@ hidden
 Is hidden and doesn\(cqt occupy any tiling space\&.
 .RE
 .PP
+collapsed
+.RS 4
+Descendants of an internal node occupy the same space\&.
+.RE
+.PP
 sticky
 .RS 4
 Stays in the focused desktop of its monitor\&.
@@ -725,7 +730,7 @@ Rotate the tree rooted at the selected node\&.
 .PP
 \fB\-I\fR, \fB\-\-invert\fR
 .RS 4
-Swap children of a selected node\&.
+Swap children of a selected node
 .RE
 .PP
 \fB\-F\fR, \fB\-\-flip\fR \fIhorizontal|vertical\fR
@@ -760,7 +765,7 @@ with
 omitted, then the state of the selected window is set to its last state\&.
 .RE
 .PP
-\fB\-g\fR, \fB\-\-flag\fR hidden|sticky|private|locked|marked[=on|off]
+\fB\-g\fR, \fB\-\-flag\fR hidden|collapsed|sticky|private|locked|marked[=on|off]
 .RS 4
 Set or toggle the given flag for the selected node\&.
 .RE
@@ -1551,7 +1556,7 @@ The geometry of a window changed\&.
 The state of a window changed\&.
 .RE
 .PP
-\fInode_flag <monitor_id> <desktop_id> <node_id> hidden|sticky|private|locked|marked|urgent on|off\fR
+\fInode_flag <monitor_id> <desktop_id> <node_id> hidden|collapsed|sticky|private|locked|marked|urgent on|off\fR
 .RS 4
 One of the flags of a node changed\&.
 .RE
