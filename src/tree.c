@@ -67,10 +67,10 @@ void arrange(monitor_t *m, desktop_t *d)
 		rect.height -= d->window_gap;
 	}
 
-	apply_layout(m, d, d->root, rect, rect, false);
+	apply_layout(m, d, d->root, rect, rect);
 }
 
-void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, xcb_rectangle_t root_rect, bool collapse)
+void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, xcb_rectangle_t root_rect)
 {
 	if (n == NULL) {
 		return;
@@ -143,8 +143,7 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 		xcb_rectangle_t first_rect;
 		xcb_rectangle_t second_rect;
 
-		collapse = n->split_ratio == 1 ? true : collapse;
-		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant || collapse) {
+		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant || n->split_ratio == 1) {
 			first_rect = second_rect = rect;
 		} else {
 			unsigned int fence;
@@ -177,8 +176,8 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 			}
 		}
 
-		apply_layout(m, d, n->first_child, first_rect, root_rect, collapse);
-		apply_layout(m, d, n->second_child, second_rect, root_rect, collapse);
+		apply_layout(m, d, n->first_child, first_rect, root_rect);
+		apply_layout(m, d, n->second_child, second_rect, root_rect);
 	}
 }
 
