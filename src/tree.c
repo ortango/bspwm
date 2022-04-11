@@ -1359,7 +1359,9 @@ void unlink_node(monitor_t *m, desktop_t *d, node_t *n)
 		b->parent = g;
 
 		if (g != NULL) {
-			set_collapsed(m, d, b, (p->collapsed));
+			if (!b->collapsed && p->collapsed) {
+				set_collapsed(m, d, b, true);
+			}
 			if (is_first_child(p)) {
 				g->first_child = b;
 			} else {
