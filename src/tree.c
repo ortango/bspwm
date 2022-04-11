@@ -2033,7 +2033,7 @@ void propagate_flags_upward(monitor_t *m, desktop_t *d, node_t *n)
 	if (p != NULL) {
 		set_vacant_local(m, d, p, (p->first_child->vacant && p->second_child->vacant));
 		set_hidden_local(m, d, p, (p->first_child->hidden && p->second_child->hidden));
-        set_collapsed_local(m, d, p, (p->first_child->hidden && p->second_child->hidden));
+        set_collapsed_local(m, d, p, (p->first_child->collapsed && p->second_child->collapsed));
 		update_constraints(p);
 	}
 
