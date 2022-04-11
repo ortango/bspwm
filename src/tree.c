@@ -729,7 +729,7 @@ node_t *make_node(uint32_t id)
 	node_t *n = calloc(1, sizeof(node_t));
 	n->id = id;
 	n->parent = n->first_child = n->second_child = NULL;
-	n->vacant = n->hidden = n->sticky = n->private = n->locked = n->marked = false;
+	n->vacant = n->hidden = n->collapsed = n->sticky = n->private = n->locked = n->marked = false;
 	n->split_ratio = split_ratio;
 	n->split_type = TYPE_VERTICAL;
 	n->constraints = (constraints_t) {MIN_WIDTH, MIN_HEIGHT};
@@ -1359,6 +1359,7 @@ void unlink_node(monitor_t *m, desktop_t *d, node_t *n)
 		b->parent = g;
 
 		if (g != NULL) {
+			set_collapsed(m, d, b, (p->collapsed));
 			if (is_first_child(p)) {
 				g->first_child = b;
 			} else {
