@@ -132,12 +132,14 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 
 		if (!rect_eq(r, cr)) {
 			window_move_resize(n->id, r.x, r.y, r.width, r.height);
+
 			if (!grabbing) {
 				put_status(SBSC_MASK_NODE_GEOMETRY, "node_geometry 0x%08X 0x%08X 0x%08X %ux%u+%i+%i\n", m->id, d->id, n->id, r.width, r.height, r.x, r.y);
 			}
 		}
 
 		window_border_width(n->id, bw);
+        window_draw_border(n->id, get_border_color((n == d->focus), (m == mon)));
 
 	} else {
 		xcb_rectangle_t first_rect;

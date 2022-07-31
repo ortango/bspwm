@@ -193,3 +193,13 @@ bool is_hex_color(const char *color)
 	}
 	return true;
 }
+
+unsigned long multiplycolor(unsigned long col, double fact) {
+    int r = (int)(((0xFF0000 & col) >> 16) * fact);
+    int g = (int)(((0x00FF00 & col) >>  8) * fact);
+    int b = (int)(((0x0000FF & col) >>  0) * fact);
+    r = r > 255 ? 255 : r;
+    g = g > 255 ? 255 : g;
+    b = b > 255 ? 255 : b;
+    return (0xFF000000 & col) | (r << 16) | (g <<  8) | (b <<  0);
+}
