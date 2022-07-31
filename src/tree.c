@@ -139,7 +139,7 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 		}
 
 		window_border_width(n->id, bw);
-        window_draw_border(n->id, get_border_color((n == d->focus), (m == mon)));
+                window_draw_border(n->id, get_border_color((n == d->focus), (m == mon)));
 
 	} else {
 		xcb_rectangle_t first_rect;
