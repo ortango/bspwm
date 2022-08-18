@@ -36,6 +36,12 @@ char active_border_color[MAXLEN];
 char focused_border_color[MAXLEN];
 char presel_feedback_color[MAXLEN];
 
+char outer_border_color[MAXLEN];
+char urgent_border_color[MAXLEN];
+char marked_border_color[MAXLEN];
+char locked_border_color[MAXLEN];
+char private_border_color[MAXLEN];
+
 padding_t padding;
 padding_t monocle_padding;
 int window_gap;
@@ -45,6 +51,8 @@ child_polarity_t initial_polarity;
 automatic_scheme_t automatic_scheme;
 bool removal_adjustment;
 tightness_t directional_focus_tightness;
+
+double border_ratio;
 
 uint16_t pointer_modifier;
 uint32_t pointer_motion_interval;
@@ -97,6 +105,12 @@ void load_settings(void)
 	snprintf(focused_border_color, sizeof(focused_border_color), "%s", FOCUSED_BORDER_COLOR);
 	snprintf(presel_feedback_color, sizeof(presel_feedback_color), "%s", PRESEL_FEEDBACK_COLOR);
 
+	snprintf(outer_border_color, sizeof(outer_border_color), "%s", OUTER_BORDER_COLOR);
+	snprintf(urgent_border_color, sizeof(urgent_border_color), "%s", OUTER_ALT_BORDER_COLOR);
+	snprintf(marked_border_color, sizeof(marked_border_color), "%s", OUTER_ALT_BORDER_COLOR);
+	snprintf(locked_border_color, sizeof(locked_border_color), "%s", OUTER_ALT_BORDER_COLOR);
+	snprintf(private_border_color, sizeof(private_border_color), "%s", OUTER_ALT_BORDER_COLOR);
+
 	padding = (padding_t) PADDING;
 	monocle_padding = (padding_t) MONOCLE_PADDING;
 	window_gap = WINDOW_GAP;
@@ -106,6 +120,8 @@ void load_settings(void)
 	automatic_scheme = AUTOMATIC_SCHEME;
 	removal_adjustment = REMOVAL_ADJUSTMENT;
 	directional_focus_tightness = TIGHTNESS_HIGH;
+
+	border_ratio = BORDER_RATIO;
 
 	pointer_modifier = POINTER_MODIFIER;
 	pointer_motion_interval = POINTER_MOTION_INTERVAL;

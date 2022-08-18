@@ -1617,6 +1617,11 @@ void set_setting(coordinates_t loc, char *name, char *value, FILE *rsp)
 	SET_COLOR(active_border_color)
 	SET_COLOR(focused_border_color)
 	SET_COLOR(presel_feedback_color)
+	SET_COLOR(outer_border_color)
+	SET_COLOR(urgent_border_color)
+	SET_COLOR(marked_border_color)
+	SET_COLOR(locked_border_color)
+	SET_COLOR(private_border_color)
 #undef SET_COLOR
 	} else if (streq("initial_polarity", name)) {
 		child_polarity_t p;
@@ -1733,6 +1738,14 @@ void set_setting(coordinates_t loc, char *name, char *value, FILE *rsp)
 			fail(rsp, "config: %s: Invalid value: '%s'.\n", name, value);
 			return;
 		}
+	} else if (streq("border_ratio", name)) {
+    	        double r;
+    	        if (sscanf(value, "%lf", &r) == 1 && r >= 0 && r <= 1) {
+        	        border_ratio = r;
+    	        } else {
+        	        fail(rsp, "config: %s: Invalid value: '%s'.\n", name, value);
+        	        return;
+        	}
 #define SET_BOOL(s) \
 	} else if (streq(#s, name)) { \
 		if (!parse_bool(value, &s)) { \
@@ -1857,6 +1870,8 @@ void get_setting(coordinates_t loc, char *name, FILE* rsp)
 	           streq("pointer_action3", name)) {
 		int index = name[14] - '1';
 		print_pointer_action(pointer_actions[index], rsp);
+	} else if (streq("border_ratio", name)) {
+    	        fprintf(rsp, "%lf", border_ratio);
 #define GET_COLOR(s) \
 	} else if (streq(#s, name)) { \
 		fprintf(rsp, "%s", s);
@@ -1864,6 +1879,11 @@ void get_setting(coordinates_t loc, char *name, FILE* rsp)
 	GET_COLOR(active_border_color)
 	GET_COLOR(focused_border_color)
 	GET_COLOR(presel_feedback_color)
+	GET_COLOR(outer_border_color)
+	GET_COLOR(urgent_border_color)
+	GET_COLOR(marked_border_color)
+	GET_COLOR(locked_border_color)
+	GET_COLOR(private_border_color)
 #undef GET_COLOR
 #define GET_BOOL(s) \
 	} else if (streq(#s, name)) { \

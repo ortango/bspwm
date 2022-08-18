@@ -411,14 +411,62 @@ void draw_border(node_t *n, bool focused_node, bool focused_monitor)
 	uint32_t border_color_pxl = get_border_color(focused_node, focused_monitor);
 	for (node_t *f = first_extrema(n); f != NULL; f = next_leaf(f, n)) {
 		if (f->client != NULL) {
-			window_draw_border(f->id, border_color_pxl);
+			window_draw_border(f->id, border_color_pxl, get_outer_border_color(n));
 		}
 	}
 }
 
-void window_draw_border(xcb_window_t win, uint32_t border_color_pxl)
+void window_draw_border(xcb_window_t win, uint32_t border_color_pxl, uint32_t outer_border_color_pxl)
 {
-	xcb_change_window_attributes(dpy, win, XCB_CW_BORDER_PIXEL, &border_color_pxl);
+    uint32_t values[1];
+    uint16_t half = 0;
+    xcb_get_geometry_reply_t *geo = xcb_get_geometry_reply(dpy, xcb_get_geometry(dpy, win), NULL);
+    if (geo == NULL) return;
+
+	uint16_t w  = geo->width;
+	uint16_t h  = geo->height;
+	uint16_t bw = geo->border_width;
+	uint16_t depth = geo->depth;
+
+	half = (double)bw * border_ratio;
+
+	xcb_rectangle_t rect_inner[] = {
+		{w,0,bw - half,h + bw - half},
+		{w + bw + half,0,bw - half,h + bw - half},
+		{0,h,w + bw - half,bw - half},
+		{0,h + bw + half,w + bw - half,bw - half},
+		{w + bw + half,bw + h + half,bw,bw}
+	};
+
+	xcb_rectangle_t rect_outer[] = {
+		{w + bw - half,0,half, h + bw * 2},
+		{w + bw,0,half,h + bw * 2},
+		{0,h + bw - half,w + bw * 2,half},
+		{0,h + bw,w + bw * 2,half},
+		{1,1,1,1}
+	};
+
+	xcb_pixmap_t pmap = xcb_generate_id(dpy);
+	xcb_create_pixmap(dpy, depth, pmap, win,w + (bw * 2),h + (bw * 2));
+
+	xcb_gcontext_t gc = xcb_generate_id(dpy);
+	xcb_create_gc(dpy, gc, pmap, 0, NULL);
+
+	values[0] = outer_border_color_pxl;
+
+	xcb_change_gc(dpy, gc, XCB_GC_FOREGROUND, &values[0]);
+	xcb_poly_fill_rectangle(dpy, pmap, gc, 5, rect_outer);
+
+	values[0] = border_color_pxl;
+
+	xcb_change_gc(dpy, gc, XCB_GC_FOREGROUND, &values[0]);
+	xcb_poly_fill_rectangle(dpy, pmap, gc, 5, rect_inner);
+	values[0] = pmap;
+	xcb_change_window_attributes(dpy,win, XCB_CW_BORDER_PIXMAP,&values[0]);
+
+	xcb_free_pixmap(dpy,pmap);
+	xcb_free_gc(dpy,gc);
+	xcb_flush(dpy);
 }
 
 void adopt_orphans(void)
@@ -450,6 +498,21 @@ uint32_t get_border_color(bool focused_node, bool focused_monitor)
 		return get_color_pixel(active_border_color);
 	} else {
 		return get_color_pixel(normal_border_color);
+	}
+}
+
+uint32_t get_outer_border_color(node_t *n)
+{
+	if (n->client != NULL && n->client->urgent) {
+		return get_color_pixel(urgent_border_color);
+	} else if (n->marked) {
+		return get_color_pixel(marked_border_color);
+	} else if (n->locked) {
+ 		return get_color_pixel(locked_border_color);
+	} else if (n->private) {
+        	return get_color_pixel(private_border_color);
+	} else {
+		return get_color_pixel(outer_border_color);
 	}
 }
 
@@ -626,6 +689,7 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 		n->client->floating_rectangle = (xcb_rectangle_t) {x, y, width, height};
 		if (n->client->state == STATE_FLOATING) {
 			window_move_resize(n->id, x, y, width, height);
+			window_draw_border(n->id, get_border_color(loc->monitor == mon, loc->node == mon->desk->focus), get_outer_border_color(n));
 
 			if (!grabbing) {
 				put_status(SBSC_MASK_NODE_GEOMETRY, "node_geometry 0x%08X 0x%08X 0x%08X %ux%u+%i+%i\n", loc->monitor->id, loc->desktop->id, loc->node->id, width, height, x, y);
