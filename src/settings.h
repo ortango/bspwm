@@ -37,6 +37,9 @@
 #define FOCUSED_BORDER_COLOR          "#817f7f"
 #define PRESEL_FEEDBACK_COLOR         "#f4d775"
 
+#define OUTER_BORDER_COLOR           "#22ff00"
+#define OUTER_ALT_BORDER_COLOR       "#22ffff"
+
 #define PADDING              {0, 0, 0, 0}
 #define MONOCLE_PADDING      {0, 0, 0, 0}
 #define WINDOW_GAP           6
@@ -44,6 +47,8 @@
 #define SPLIT_RATIO          0.5
 #define AUTOMATIC_SCHEME     SCHEME_LONGEST_SIDE
 #define REMOVAL_ADJUSTMENT   true
+
+#define BORDER_RATIO         0.5
 
 #define PRESEL_FEEDBACK             true
 #define BORDERLESS_MONOCLE          false
@@ -76,6 +81,12 @@ extern char active_border_color[MAXLEN];
 extern char focused_border_color[MAXLEN];
 extern char presel_feedback_color[MAXLEN];
 
+extern char outer_border_color[MAXLEN];
+extern char urgent_border_color[MAXLEN];
+extern char marked_border_color[MAXLEN];
+extern char locked_border_color[MAXLEN];
+extern char private_border_color[MAXLEN];
+
 extern padding_t padding;
 extern padding_t monocle_padding;
 extern int window_gap;
@@ -85,6 +96,8 @@ extern child_polarity_t initial_polarity;
 extern automatic_scheme_t automatic_scheme;
 extern bool removal_adjustment;
 extern tightness_t directional_focus_tightness;
+
+extern double border_ratio;
 
 extern uint16_t pointer_modifier;
 extern uint32_t pointer_motion_interval;

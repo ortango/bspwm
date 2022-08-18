@@ -132,12 +132,14 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 
 		if (!rect_eq(r, cr)) {
 			window_move_resize(n->id, r.x, r.y, r.width, r.height);
+
 			if (!grabbing) {
 				put_status(SBSC_MASK_NODE_GEOMETRY, "node_geometry 0x%08X 0x%08X 0x%08X %ux%u+%i+%i\n", m->id, d->id, n->id, r.width, r.height, r.x, r.y);
 			}
 		}
 
 		window_border_width(n->id, bw);
+		window_draw_border(n->id, get_border_color(is_descendant(n, d->focus), (m == mon)), get_outer_border_color(n));
 
 	} else {
 		xcb_rectangle_t first_rect;
@@ -488,7 +490,7 @@ bool activate_node(monitor_t *m, desktop_t *d, node_t *n)
 		if (d->focus != n) {
 			for (node_t *f = first_extrema(d->focus); f != NULL; f = next_leaf(f, d->focus)) {
 				if (f->client != NULL && !is_descendant(f, n)) {
-					window_draw_border(f->id, get_border_color(false, (m == mon)));
+					window_draw_border(f->id, get_border_color(false, (m == mon)), get_outer_border_color(f));
 				}
 			}
 		}
@@ -614,7 +616,7 @@ bool focus_node(monitor_t *m, desktop_t *d, node_t *n)
 	if (d->focus != n) {
 		for (node_t *f = first_extrema(d->focus); f != NULL; f = next_leaf(f, d->focus)) {
 			if (f->client != NULL && !is_descendant(f, n)) {
-				window_draw_border(f->id, get_border_color(false, true));
+				window_draw_border(f->id, get_border_color(false, true), get_outer_border_color(f));
 			}
 		}
 	}
@@ -2174,6 +2176,8 @@ void set_private(monitor_t *m, desktop_t *d, node_t *n, bool value)
 	if (n == m->desk->focus) {
 		put_status(SBSC_MASK_REPORT);
 	}
+
+	window_draw_border(n->id, get_border_color(is_descendant(n, d->focus), (m == mon)), get_outer_border_color(n));
 }
 
 void set_locked(monitor_t *m, desktop_t *d, node_t *n, bool value)
@@ -2189,6 +2193,8 @@ void set_locked(monitor_t *m, desktop_t *d, node_t *n, bool value)
 	if (n == m->desk->focus) {
 		put_status(SBSC_MASK_REPORT);
 	}
+
+	window_draw_border(n->id, get_border_color(is_descendant(n, d->focus), (m == mon)), get_outer_border_color(n));
 }
 
 void set_marked(monitor_t *m, desktop_t *d, node_t *n, bool value)
@@ -2204,6 +2210,8 @@ void set_marked(monitor_t *m, desktop_t *d, node_t *n, bool value)
 	if (n == m->desk->focus) {
 		put_status(SBSC_MASK_REPORT);
 	}
+
+	window_draw_border(n->id, get_border_color(is_descendant(n, d->focus), (m == mon)), get_outer_border_color(n));
 }
 
 void set_urgent(monitor_t *m, desktop_t *d, node_t *n, bool value)
@@ -2224,6 +2232,8 @@ void set_urgent(monitor_t *m, desktop_t *d, node_t *n, bool value)
 
 	put_status(SBSC_MASK_NODE_FLAG, "node_flag 0x%08X 0x%08X 0x%08X urgent %s\n", m->id, d->id, n->id, ON_OFF_STR(value));
 	put_status(SBSC_MASK_REPORT);
+
+	window_draw_border(n->id, get_border_color(is_descendant(n, d->focus), (m == mon)), get_outer_border_color(n));
 }
 
 xcb_rectangle_t get_rectangle(monitor_t *m, desktop_t *d, node_t *n)
