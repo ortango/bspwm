@@ -185,6 +185,7 @@ typedef struct {
 	option_bool_t above;
 	option_bool_t horizontal;
 	option_bool_t vertical;
+	option_bool_t collapsed;
 } node_select_t;
 
 typedef struct {
@@ -252,6 +253,7 @@ struct node_t {
 	constraints_t constraints;
 	bool vacant;
 	bool hidden;
+	bool collapsed;
 	bool sticky;
 	bool private;
 	bool locked;

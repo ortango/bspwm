@@ -67,10 +67,10 @@ void arrange(monitor_t *m, desktop_t *d)
 		rect.height -= d->window_gap;
 	}
 
-	apply_layout(m, d, d->root, rect, rect);
+	apply_layout(m, d, d->root, rect, rect, false);
 }
 
-void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, xcb_rectangle_t root_rect)
+void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, xcb_rectangle_t root_rect, bool collapse)
 {
 	if (n == NULL) {
 		return;
@@ -145,7 +145,8 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 		xcb_rectangle_t first_rect;
 		xcb_rectangle_t second_rect;
 
-		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant) {
+		collapse = n->collapsed || collapse;
+		if (d->layout == LAYOUT_MONOCLE || n->first_child->vacant || n->second_child->vacant || collapse) {
 			first_rect = second_rect = rect;
 		} else {
 			unsigned int fence;
@@ -178,8 +179,8 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 			}
 		}
 
-		apply_layout(m, d, n->first_child, first_rect, root_rect);
-		apply_layout(m, d, n->second_child, second_rect, root_rect);
+		apply_layout(m, d, n->first_child, first_rect, root_rect, collapse);
+		apply_layout(m, d, n->second_child, second_rect, root_rect, collapse);
 	}
 }
 
@@ -728,7 +729,7 @@ node_t *make_node(uint32_t id)
 	node_t *n = calloc(1, sizeof(node_t));
 	n->id = id;
 	n->parent = n->first_child = n->second_child = NULL;
-	n->vacant = n->hidden = n->sticky = n->private = n->locked = n->marked = false;
+	n->vacant = n->hidden = n->collapsed = n->sticky = n->private = n->locked = n->marked = false;
 	n->split_ratio = split_ratio;
 	n->split_type = TYPE_VERTICAL;
 	n->constraints = (constraints_t) {MIN_WIDTH, MIN_HEIGHT};
@@ -1345,6 +1346,9 @@ void unlink_node(monitor_t *m, desktop_t *d, node_t *n)
 		b->parent = g;
 
 		if (g != NULL) {
+			if (!b->collapsed && p->collapsed) {
+				set_collapsed(m, d, b, true);
+			}
 			if (is_first_child(p)) {
 				g->first_child = b;
 			} else {
@@ -2127,6 +2131,17 @@ void propagate_hidden_upward(monitor_t *m, desktop_t *d, node_t *n)
 	}
 
 	propagate_hidden_upward(m, d, p);
+}
+
+void set_collapsed(monitor_t *m, desktop_t *d, node_t *n, bool value)
+{
+	if (n == NULL || is_leaf(n) || n->collapsed == value) {
+		return;
+	}
+	
+	n->collapsed = value;
+	
+	put_status(SBSC_MASK_NODE_FLAG, "node_flag 0x%08X 0x%08X 0x%08X collapsed %s\n", m->id, d->id, n->id, ON_OFF_STR(value));
 }
 
 void set_sticky(monitor_t *m, desktop_t *d, node_t *n, bool value)

@@ -124,6 +124,7 @@ void query_node(node_t *n, FILE *rsp)
 		fprintf(rsp, "\"splitRatio\":%lf,", n->split_ratio);
 		fprintf(rsp, "\"vacant\":%s,", BOOL_STR(n->vacant));
 		fprintf(rsp, "\"hidden\":%s,", BOOL_STR(n->hidden));
+		fprintf(rsp, "\"collapsed\":%s,", BOOL_STR(n->collapsed));
 		fprintf(rsp, "\"sticky\":%s,", BOOL_STR(n->sticky));
 		fprintf(rsp, "\"private\":%s,", BOOL_STR(n->private));
 		fprintf(rsp, "\"locked\":%s,", BOOL_STR(n->locked));
@@ -487,6 +488,7 @@ node_select_t make_node_select(void)
 		.floating = OPTION_NONE,
 		.fullscreen = OPTION_NONE,
 		.hidden = OPTION_NONE,
+		.collapsed = OPTION_NONE,
 		.sticky = OPTION_NONE,
 		.private = OPTION_NONE,
 		.locked = OPTION_NONE,
@@ -1129,6 +1131,7 @@ bool node_matches(coordinates_t *loc, coordinates_t *ref, node_select_t *sel)
 		return false; \
 	}
 	NFLAG(hidden)
+	NFLAG(collapsed)
 	NFLAG(sticky)
 	NFLAG(private)
 	NFLAG(locked)
