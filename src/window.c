@@ -511,6 +511,8 @@ uint32_t get_outer_border_color(node_t *n)
  		return get_color_pixel(locked_border_color);
 	} else if (n->private) {
         	return get_color_pixel(private_border_color);
+	} else if (is_collapsed(n)) {
+		return get_color_pixel(collapsed_border_color);
 	} else {
 		return get_color_pixel(outer_border_color);
 	}

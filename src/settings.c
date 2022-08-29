@@ -41,6 +41,7 @@ char urgent_border_color[MAXLEN];
 char marked_border_color[MAXLEN];
 char locked_border_color[MAXLEN];
 char private_border_color[MAXLEN];
+char collapsed_border_color[MAXLEN];
 
 padding_t padding;
 padding_t monocle_padding;
@@ -110,6 +111,7 @@ void load_settings(void)
 	snprintf(marked_border_color, sizeof(marked_border_color), "%s", OUTER_ALT_BORDER_COLOR);
 	snprintf(locked_border_color, sizeof(locked_border_color), "%s", OUTER_ALT_BORDER_COLOR);
 	snprintf(private_border_color, sizeof(private_border_color), "%s", OUTER_ALT_BORDER_COLOR);
+	snprintf(collapsed_border_color, sizeof(collapsed_border_color), "%s", OUTER_ALT_BORDER_COLOR);
 
 	padding = (padding_t) PADDING;
 	monocle_padding = (padding_t) MONOCLE_PADDING;
