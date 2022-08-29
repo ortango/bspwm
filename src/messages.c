@@ -1619,6 +1619,7 @@ void set_setting(coordinates_t loc, char *name, char *value, FILE *rsp)
 	SET_COLOR(marked_border_color)
 	SET_COLOR(locked_border_color)
 	SET_COLOR(private_border_color)
+	SET_COLOR(collapsed_border_color)
 #undef SET_COLOR
 	} else if (streq("initial_polarity", name)) {
 		child_polarity_t p;
@@ -1881,6 +1882,7 @@ void get_setting(coordinates_t loc, char *name, FILE* rsp)
 	GET_COLOR(marked_border_color)
 	GET_COLOR(locked_border_color)
 	GET_COLOR(private_border_color)
+	GET_COLOR(collapsed_border_color)
 #undef GET_COLOR
 #define GET_BOOL(s) \
 	} else if (streq(#s, name)) { \

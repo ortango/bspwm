@@ -86,6 +86,7 @@ extern char urgent_border_color[MAXLEN];
 extern char marked_border_color[MAXLEN];
 extern char locked_border_color[MAXLEN];
 extern char private_border_color[MAXLEN];
+extern char collapsed_border_color[MAXLEN];
 
 extern padding_t padding;
 extern padding_t monocle_padding;

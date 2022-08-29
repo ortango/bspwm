@@ -827,6 +827,18 @@ bool is_second_child(node_t *n)
 	return (n != NULL && n->parent != NULL && n->parent->second_child == n);
 }
 
+bool is_collapsed(node_t *n)
+{
+    while (n != NULL) {
+        if (n->collapsed) {
+            return true;
+        } else {
+            n = n->parent;
+        }
+    }
+    return false;
+}
+
 unsigned int clients_count_in(node_t *n)
 {
 	if (n == NULL) {
