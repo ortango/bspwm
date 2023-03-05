@@ -1375,7 +1375,6 @@ void unlink_node(monitor_t *m, desktop_t *d, node_t *n)
 		b->parent = g;
 
 		if (g != NULL) {
-			set_collapsed(m, d, b, (p->collapsed));
 			if (is_first_child(p)) {
 				g->first_child = b;
 			} else {
@@ -1384,6 +1383,8 @@ void unlink_node(monitor_t *m, desktop_t *d, node_t *n)
 		} else {
 			d->root = b;
 		}
+
+		set_collapsed(m, d, b, ( b->collapsed || p->collapsed ));
 
 		if (!n->vacant && removal_adjustment) {
 			if (automatic_scheme == SCHEME_SPIRAL) {
