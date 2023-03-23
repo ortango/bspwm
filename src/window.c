@@ -452,12 +452,12 @@ void window_draw_border(xcb_window_t win, uint32_t border_color_pxl, uint32_t ou
 	xcb_gcontext_t gc = xcb_generate_id(dpy);
 	xcb_create_gc(dpy, gc, pmap, 0, NULL);
 
-	values[0] = outer_border_color_pxl;
+	values[0] = invert_border_colors ? border_color_pxl : outer_border_color_pxl;
 
 	xcb_change_gc(dpy, gc, XCB_GC_FOREGROUND, &values[0]);
 	xcb_poly_fill_rectangle(dpy, pmap, gc, 5, rect_outer);
 
-	values[0] = border_color_pxl;
+	values[0] = invert_border_colors ? outer_border_color_pxl : border_color_pxl;
 
 	xcb_change_gc(dpy, gc, XCB_GC_FOREGROUND, &values[0]);
 	xcb_poly_fill_rectangle(dpy, pmap, gc, 5, rect_inner);
