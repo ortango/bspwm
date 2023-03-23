@@ -40,6 +40,8 @@
 #define OUTER_BORDER_COLOR           "#22ff00"
 #define OUTER_ALT_BORDER_COLOR       "#22ffff"
 
+#define INVERT_BORDER_COLORS false
+
 #define PADDING              {0, 0, 0, 0}
 #define MONOCLE_PADDING      {0, 0, 0, 0}
 #define WINDOW_GAP           6
@@ -86,6 +88,8 @@ extern char urgent_border_color[MAXLEN];
 extern char marked_border_color[MAXLEN];
 extern char locked_border_color[MAXLEN];
 extern char private_border_color[MAXLEN];
+
+extern bool invert_border_colors;
 
 extern padding_t padding;
 extern padding_t monocle_padding;

@@ -42,6 +42,8 @@ char marked_border_color[MAXLEN];
 char locked_border_color[MAXLEN];
 char private_border_color[MAXLEN];
 
+bool invert_border_colors;
+
 padding_t padding;
 padding_t monocle_padding;
 int window_gap;
@@ -110,6 +112,8 @@ void load_settings(void)
 	snprintf(marked_border_color, sizeof(marked_border_color), "%s", OUTER_ALT_BORDER_COLOR);
 	snprintf(locked_border_color, sizeof(locked_border_color), "%s", OUTER_ALT_BORDER_COLOR);
 	snprintf(private_border_color, sizeof(private_border_color), "%s", OUTER_ALT_BORDER_COLOR);
+
+	invert_border_colors = INVERT_BORDER_COLORS;
 
 	padding = (padding_t) PADDING;
 	monocle_padding = (padding_t) MONOCLE_PADDING;
