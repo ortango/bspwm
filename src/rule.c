@@ -327,6 +327,7 @@ void apply_rules(xcb_window_t win, rule_consequence_t *csq)
 	_apply_window_type(win, csq);
 	_apply_window_state(win, csq);
 	_apply_transient(win, csq);
+	#guess this is good/bad as anything else as simple - regarding the size_hints_ontype patch...
 	if (honor_size_hints) {
 		_apply_hints(win, csq);
 	}
