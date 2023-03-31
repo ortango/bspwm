@@ -289,7 +289,7 @@ void track_pointer(coordinates_t loc, pointer_action_t pac, xcb_point_t pos)
 			if (pac == ACTION_MOVE) {
 				move_client(&loc, dx, dy);
 			} else {
-				if (honor_size_hints != 0) {
+				if (((STATE_TILED & STATE_PSEUDO_TILED) & honor_size_hints) == 0) {
 					resize_client(&loc, rh, e->root_x, e->root_y, false);
 				} else {
 					resize_client(&loc, rh, dx, dy, true);
