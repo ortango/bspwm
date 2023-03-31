@@ -51,10 +51,10 @@ typedef enum {
 } automatic_scheme_t;
 
 typedef enum {
-	STATE_TILED,
-	STATE_PSEUDO_TILED,
-	STATE_FLOATING,
-	STATE_FULLSCREEN
+	STATE_TILED = 1 << 0,
+	STATE_PSEUDO_TILED = 1 << 1,
+	STATE_FLOATING = 1 << 2,
+	STATE_FULLSCREEN = 1 << 3
 } client_state_t;
 
 typedef enum {

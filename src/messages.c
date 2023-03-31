@@ -1600,6 +1600,10 @@ void set_setting(coordinates_t loc, char *name, char *value, FILE *rsp)
 		if (sscanf(value, "%i", &monocle_padding.left) != 1) {
 			fail(rsp, "config: %s: Invalid value: '%s'.\n", name, value);
 		}
+	} else if (streq("honor_size_hints", name)) {
+    		if (sscanf(value, "%i", &honor_size_hints) != 1) {
+        		fail(rsp, "config: %s: Invalid value: '%s'.\n", name, value);
+    		}
 #define SET_STR(s) \
 	} else if (streq(#s, name)) { \
 		if (snprintf(s, sizeof(s), "%s", value) < 0) { \
@@ -1777,7 +1781,6 @@ void set_setting(coordinates_t loc, char *name, char *value, FILE *rsp)
 		SET_BOOL(ignore_ewmh_focus)
 		SET_BOOL(ignore_ewmh_struts)
 		SET_BOOL(center_pseudo_tiled)
-		SET_BOOL(honor_size_hints)
 		SET_BOOL(removal_adjustment)
 		SET_BOOL(invert_border_colors)
 #undef SET_BOOL
@@ -1861,6 +1864,8 @@ void get_setting(coordinates_t loc, char *name, FILE* rsp)
 		fprintf(rsp, "%i", monocle_padding.bottom);
 	} else if (streq("left_monocle_padding", name)) {
 		fprintf(rsp, "%i", monocle_padding.left);
+	} else if (streq("honor_size_hints", name)) {
+    		fprintf(rsp, "%i", honor_size_hints);
 	} else if (streq("external_rules_command", name)) {
 		fprintf(rsp, "%s", external_rules_command);
 	} else if (streq("status_prefix", name)) {
@@ -1917,7 +1922,6 @@ void get_setting(coordinates_t loc, char *name, FILE* rsp)
 	GET_BOOL(ignore_ewmh_focus)
 	GET_BOOL(ignore_ewmh_struts)
 	GET_BOOL(center_pseudo_tiled)
-	GET_BOOL(honor_size_hints)
 	GET_BOOL(removal_adjustment)
 	GET_BOOL(remove_disabled_monitors)
 	GET_BOOL(remove_unplugged_monitors)
