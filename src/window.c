@@ -681,7 +681,7 @@ bool resize_client(coordinates_t *loc, resize_handle_t rh, int dx, int dy, bool 
 		n->client->floating_rectangle = (xcb_rectangle_t) {x, y, width, height};
 		if (n->client->state == STATE_FLOATING) {
 			window_move_resize(n->id, x, y, width, height);
-			window_draw_border(n->id, get_border_color(loc->monitor == mon, loc->node == mon->desk->focus), get_outer_border_color(n));
+			window_draw_border(n->id, get_border_color(loc->node == mon->desk->focus, loc->monitor == mon), get_outer_border_color(n));
 
 			if (!grabbing) {
 				put_status(SBSC_MASK_NODE_GEOMETRY, "node_geometry 0x%08X 0x%08X 0x%08X %ux%u+%i+%i\n", loc->monitor->id, loc->desktop->id, loc->node->id, width, height, x, y);
