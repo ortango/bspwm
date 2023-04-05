@@ -297,6 +297,8 @@ node_t *insert_node(monitor_t *m, desktop_t *d, node_t *n, node_t *f)
 		return NULL;
 	}
 
+	bool d_was_not_occupied = d->root == NULL;
+
 	/* n: inserted node */
 	/* c: new internal node */
 	/* f: focus or insertion anchor */
@@ -455,6 +457,10 @@ node_t *insert_node(monitor_t *m, desktop_t *d, node_t *n, node_t *f)
 
 	if (d->focus == NULL && is_focusable(n)) {
 		d->focus = n;
+	}
+
+	if (d_was_not_occupied) {
+		put_status(SBSC_MASK_REPORT);
 	}
 
 	return f;
@@ -1310,7 +1316,8 @@ int balance_tree(node_t *n)
  * despite the potential alteration of their rectangle. */
 void adjust_ratios(node_t *n, xcb_rectangle_t rect)
 {
-	if (n == NULL) {
+#define NULL_OR_VACANT(n) ((n) == NULL || (n)->vacant)
+	if (NULL_OR_VACANT(n)) {
 		return;
 	}
 
@@ -1331,6 +1338,16 @@ void adjust_ratios(node_t *n, xcb_rectangle_t rect)
 	xcb_rectangle_t first_rect;
 	xcb_rectangle_t second_rect;
 	unsigned int fence;
+
+	if (NULL_OR_VACANT(n->first_child)) {
+		adjust_ratios(n->second_child, rect);
+		return;
+	}
+	if (NULL_OR_VACANT(n->second_child)) {
+		adjust_ratios(n->first_child, rect);
+		return;
+	}
+#undef NULL_OR_VACANT
 
 	if (n->split_type == TYPE_VERTICAL) {
 		fence = rect.width * n->split_ratio;
@@ -1357,6 +1374,7 @@ void unlink_node(monitor_t *m, desktop_t *d, node_t *n)
 	if (p == NULL) {
 		d->root = NULL;
 		d->focus = NULL;
+		put_status(SBSC_MASK_REPORT);
 	} else {
 		if (d->focus == p || is_descendant(d->focus, n)) {
 			d->focus = NULL;
