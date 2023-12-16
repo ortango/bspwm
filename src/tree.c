@@ -1537,11 +1537,11 @@ bool swap_nodes(monitor_t *m1, desktop_t *d1, node_t *n1, monitor_t *m2, desktop
 		}
 
 		if (n1_held_focus) {
-			d1->focus = n2_held_focus ? last_d2_focus : n2;
+			d1->focus = n2_held_focus ? last_d2_focus : (IS_RECEPTACLE(n2) ? NULL : n2);
 		}
 
 		if (n2_held_focus) {
-			d2->focus = n1_held_focus ? last_d1_focus : n1;
+			d2->focus = n1_held_focus ? last_d1_focus : (IS_RECEPTACLE(n1) ? NULL : n1);
 		}
 
 		if (m1 != m2) {
