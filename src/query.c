@@ -1102,13 +1102,6 @@ bool node_matches(coordinates_t *loc, coordinates_t *ref, node_select_t *sel)
 		return false;
 	}
 
-	if (sel->active != OPTION_NONE &&
-	    loc->desktop != loc->monitor->desk
-	    ? sel->active == OPTION_TRUE
-	    : sel->active == OPTION_FALSE) {
-		return false;
-	}
-
 	if (sel->leaf != OPTION_NONE &&
 	    !is_leaf(loc->node)
 	    ? sel->leaf == OPTION_TRUE
