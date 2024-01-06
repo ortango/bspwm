@@ -35,6 +35,7 @@
 #include "events.h"
 #include "window.h"
 #include "pointer.h"
+#include "geometry.h"
 
 uint16_t num_lock;
 uint16_t caps_lock;
@@ -95,6 +96,8 @@ void window_grab_button(xcb_window_t win, uint8_t button, uint16_t modifier)
 			GRAB(button, modifier | scroll_lock);
 		}
 #undef GRAB
+	//grab buttoni for possible border event
+	xcb_grab_button(dpy, false, win, XCB_EVENT_MASK_BUTTON_PRESS, XCB_GRAB_MODE_SYNC, XCB_GRAB_MODE_ASYNC, XCB_NONE, XCB_NONE, button, XCB_NONE);
 }
 
 void grab_buttons(void)
@@ -203,7 +206,7 @@ resize_handle_t get_handle(node_t *n, xcb_point_t pos, pointer_action_t pac)
 	return rh;
 }
 
-bool grab_pointer(pointer_action_t pac)
+bool grab_pointer(pointer_action_t pac, bool border_only)
 {
 	xcb_window_t win = XCB_NONE;
 	xcb_point_t pos;
@@ -234,7 +237,24 @@ bool grab_pointer(pointer_action_t pac)
 	}
 
 	if (loc.node->client->state == STATE_FULLSCREEN) {
-		return true;
+		return !border_only;
+	}
+
+	if (border_only) {
+    		bool the_only_window = !loc.monitor->prev && !loc.monitor->next && loc.desktop->root->client;
+    		if ((borderless_monocle && loc.desktop->layout == LAYOUT_MONOCLE && IS_TILED(loc.node->client))
+    		    || (borderless_singleton && the_only_window)) {
+        		    return false;
+    		}
+    		unsigned int bw = loc.node->client->border_width;
+    		xcb_rectangle_t rect = get_rectangle(NULL, NULL, loc.node);
+    		rect.x = rect.x + bw;
+    		rect.y = rect.y + bw;
+    		rect.width = rect.width - bw;
+    		rect.height = rect.height - bw;
+    		if (is_inside(pos, rect)) {
+        		return false;
+    		}
 	}
 
 	xcb_grab_pointer_reply_t *reply = xcb_grab_pointer_reply(dpy, xcb_grab_pointer(dpy, 0, root, XCB_EVENT_MASK_BUTTON_RELEASE|XCB_EVENT_MASK_BUTTON_MOTION, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_NONE, XCB_NONE, XCB_CURRENT_TIME), NULL);
