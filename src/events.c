@@ -386,11 +386,13 @@ void button_press(xcb_generic_event_t *evt)
 			bool pfm = pointer_follows_monitor;
 			pointer_follows_focus = false;
 			pointer_follows_monitor = false;
-			replay = !grab_pointer(ACTION_FOCUS) || !swallow_first_click;
+			replay = !grab_pointer(ACTION_FOCUS, false) || !swallow_first_click;
 			pointer_follows_focus = pff;
 			pointer_follows_monitor = pfm;
+		} else if (cleaned_mask(e->state) == XCB_NONE) {
+    			replay = !grab_pointer(pointer_actions[i], true);
 		} else {
-			grab_pointer(pointer_actions[i]);
+			grab_pointer(pointer_actions[i], false);
 		}
 	}
 	xcb_allow_events(dpy, replay ? XCB_ALLOW_REPLAY_POINTER : XCB_ALLOW_SYNC_POINTER, e->time);
