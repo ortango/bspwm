@@ -250,8 +250,6 @@ bool grab_pointer(pointer_action_t pac, bool border_only)
     		xcb_rectangle_t rect = get_rectangle(NULL, NULL, loc.node);
     		rect.x = rect.x + bw;
     		rect.y = rect.y + bw;
-    		rect.width = rect.width - bw;
-    		rect.height = rect.height - bw;
     		if (is_inside(pos, rect)) {
         		return false;
     		}
