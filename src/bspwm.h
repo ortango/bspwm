@@ -26,6 +26,7 @@
 #define BSPWM_BSPWM_H
 
 #include "types.h"
+#include <signal.h>
 
 #define WM_NAME                  "bspwm"
 #define CONFIG_NAME              WM_NAME "rc"
