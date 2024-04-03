@@ -30,7 +30,6 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <fcntl.h>
-#include <signal.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
