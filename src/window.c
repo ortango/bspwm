@@ -896,7 +896,7 @@ void window_border_width(xcb_window_t win, uint32_t bw)
 {
 	uint32_t values[] = {bw};
 	xcb_configure_window(dpy, win, XCB_CONFIG_WINDOW_BORDER_WIDTH, values);
-	xcb_change_property(dpy, XCB_PROP_MODE_REPLACE, win, _NET_FRAME_EXTENTS, XCB_ATOM_CARDINAL, 32, 4, &values);
+	xcb_change_property(dpy, XCB_PROP_MODE_REPLACE, win, ewmh->_NET_FRAME_EXTENTS, XCB_ATOM_CARDINAL, 32, 4, &values);
 }
 
 void window_move(xcb_window_t win, int16_t x, int16_t y)
