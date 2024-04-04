@@ -59,6 +59,7 @@
 #define IGNORE_EWMH_FOCUS           false
 #define IGNORE_EWMH_FULLSCREEN      0
 #define IGNORE_EWMH_STRUTS          false
+#define IGNORE_EWMH_POSITION        false
 
 #define CENTER_PSEUDO_TILED         true
 #define HONOR_SIZE_HINTS            HONOR_SIZE_HINTS_NO
@@ -104,6 +105,7 @@ extern int8_t click_to_focus;
 extern bool swallow_first_click;
 extern bool ignore_ewmh_focus;
 extern bool ignore_ewmh_struts;
+extern boot ignore_ewmh_position;
 extern state_transition_t ignore_ewmh_fullscreen;
 
 extern bool center_pseudo_tiled;
