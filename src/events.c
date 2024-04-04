@@ -169,8 +169,6 @@ void configure_request(xcb_generic_event_t *evt)
 		apply_size_hints(c, &width, &height);
 		c->floating_rectangle.width = width;
 		c->floating_rectangle.height = height;
-		c->floating_rectangle.x -= c->border_width;
-		c->floating_rectangle.y -= c->border_width;
 		xcb_rectangle_t r = c->floating_rectangle;
 
 		window_move_resize(e->window, r.x, r.y, r.width, r.height);
