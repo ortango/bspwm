@@ -122,6 +122,8 @@ void apply_layout(monitor_t *m, desktop_t *d, node_t *n, xcb_rectangle_t rect, x
 		/* floating clients */
 		} else if (s == STATE_FLOATING) {
 			r = n->client->floating_rectangle;
+			c->floating_rectangle.x -= c->border_width;
+			c->floating_rectangle.y -= c->border_width;
 		/* fullscreen clients */
 		} else {
 			r = m->rectangle;
