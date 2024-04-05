@@ -64,6 +64,7 @@ int8_t click_to_focus;
 bool swallow_first_click;
 bool ignore_ewmh_focus;
 bool ignore_ewmh_struts;
+bool ignore_ewmh_position;
 state_transition_t ignore_ewmh_fullscreen;
 
 bool center_pseudo_tiled;
@@ -128,6 +129,7 @@ void load_settings(void)
 	ignore_ewmh_focus = IGNORE_EWMH_FOCUS;
 	ignore_ewmh_fullscreen = IGNORE_EWMH_FULLSCREEN;
 	ignore_ewmh_struts = IGNORE_EWMH_STRUTS;
+	ignore_ewmh_position = IGNORE_EWMH_POSITION;
 
 	center_pseudo_tiled = CENTER_PSEUDO_TILED;
 	honor_size_hints = HONOR_SIZE_HINTS;
