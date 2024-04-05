@@ -123,7 +123,7 @@ extern int8_t click_to_focus;
 extern bool swallow_first_click;
 extern bool ignore_ewmh_focus;
 extern bool ignore_ewmh_struts;
-extern boot ignore_ewmh_position;
+extern bool ignore_ewmh_position;
 extern state_transition_t ignore_ewmh_fullscreen;
 
 extern bool center_pseudo_tiled;
