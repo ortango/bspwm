@@ -146,7 +146,7 @@ void configure_request(xcb_generic_event_t *evt)
 
 		xcb_configure_window(dpy, e->window, mask, values);
 
-	} else if (IS_FLOATING(c) && !ewmh_ignore_position) {
+	} else if (IS_FLOATING(c) && !ignore_ewmh_position) {
 		width = c->floating_rectangle.width;
 		height = c->floating_rectangle.height;
 
