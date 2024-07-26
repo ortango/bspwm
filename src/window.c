@@ -895,7 +895,6 @@ void disable_motion_recorder(void)
 void window_border_width(xcb_window_t win, uint32_t bw)
 {
 	uint32_t value[] = {bw};
-	uint32_t values[] = {bw,bw,bw,bw};
 	xcb_configure_window(dpy, win, XCB_CONFIG_WINDOW_BORDER_WIDTH, value);
 }
 
