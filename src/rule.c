@@ -352,9 +352,6 @@ void apply_rules(xcb_window_t win, rule_consequence_t *csq)
 
 bool schedule_rules(xcb_window_t win, rule_consequence_t *csq)
 {
-	if (external_rules_command[0] == '\0') {
-		return false;
-	}
 	resolve_rule_consequence(csq);
 	int fds[2];
 	if (pipe(fds) == -1) {
