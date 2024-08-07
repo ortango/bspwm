@@ -150,12 +150,14 @@ void configure_request(xcb_generic_event_t *evt)
 		width = c->floating_rectangle.width;
 		height = c->floating_rectangle.height;
 
-		if (e->value_mask & XCB_CONFIG_WINDOW_X) {
-			c->floating_rectangle.x = e->x;
-		}
+		if (!ignore_ewmh_position) {
+			if (e->value_mask & XCB_CONFIG_WINDOW_X) {
+				c->floating_rectangle.x = e->x;
+			}
 
-		if (e->value_mask & XCB_CONFIG_WINDOW_Y) {
-			c->floating_rectangle.y = e->y;
+			if (e->value_mask & XCB_CONFIG_WINDOW_Y) {
+				c->floating_rectangle.y = e->y;
+			}
 		}
 
 		if (e->value_mask & XCB_CONFIG_WINDOW_WIDTH) {
