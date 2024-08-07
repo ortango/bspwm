@@ -146,16 +146,18 @@ void configure_request(xcb_generic_event_t *evt)
 
 		xcb_configure_window(dpy, e->window, mask, values);
 
-	} else if (IS_FLOATING(c) && !ignore_ewmh_position) {
+	} else if (IS_FLOATING(c)) {
 		width = c->floating_rectangle.width;
 		height = c->floating_rectangle.height;
 
-		if (e->value_mask & XCB_CONFIG_WINDOW_X) {
-			c->floating_rectangle.x = e->x;
-		}
+		if (!ignore_ewmh_position) {
+			if (e->value_mask & XCB_CONFIG_WINDOW_X) {
+				c->floating_rectangle.x = e->x;
+			}
 
-		if (e->value_mask & XCB_CONFIG_WINDOW_Y) {
-			c->floating_rectangle.y = e->y;
+			if (e->value_mask & XCB_CONFIG_WINDOW_Y) {
+				c->floating_rectangle.y = e->y;
+			}
 		}
 
 		if (e->value_mask & XCB_CONFIG_WINDOW_WIDTH) {
