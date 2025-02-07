@@ -1591,9 +1591,9 @@ void set_setting(coordinates_t loc, char *name, char *value, FILE *rsp)
 			fail(rsp, "config: %s: Invalid value: '%s'.\n", name, value);
 		}
 	} else if (streq("honor_size_hints", name)) {
-    		if (sscanf(value, "%i", &honor_size_hints) != 1) {
-        		fail(rsp, "config: %s: Invalid value: '%s'.\n", name, value);
-    		}
+		if (sscanf(value, "%hhu", &honor_size_hints) != 1) {
+			fail(rsp, "config: %s: Invalid value: '%s'.\n", name, value);
+		}
 #define SET_STR(s) \
 	} else if (streq(#s, name)) { \
 		if (snprintf(s, sizeof(s), "%s", value) < 0) { \
@@ -1840,7 +1840,7 @@ void get_setting(coordinates_t loc, char *name, FILE* rsp)
 	} else if (streq("left_monocle_padding", name)) {
 		fprintf(rsp, "%i", monocle_padding.left);
 	} else if (streq("honor_size_hints", name)) {
-    		fprintf(rsp, "%i", honor_size_hints);
+		fprintf(rsp, "%u", honor_size_hints);
 	} else if (streq("external_rules_command", name)) {
 		fprintf(rsp, "%s", external_rules_command);
 	} else if (streq("status_prefix", name)) {

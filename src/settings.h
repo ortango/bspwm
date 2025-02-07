@@ -107,7 +107,7 @@ extern bool ignore_ewmh_struts;
 extern state_transition_t ignore_ewmh_fullscreen;
 
 extern bool center_pseudo_tiled;
-extern int honor_size_hints;
+extern uint8_t honor_size_hints;
 
 extern bool remove_disabled_monitors;
 extern bool remove_unplugged_monitors;
