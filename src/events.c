@@ -181,6 +181,7 @@ void configure_request(xcb_generic_event_t *evt)
 		if (m != loc.monitor) {
 			transfer_node(loc.monitor, loc.desktop, loc.node, m, m->desk, m->desk->focus, false);
 		}
+		window_draw_border(e->window, get_border_color(is_descendant(loc.node, loc.desktop->focus), (m->id == loc.monitor->id)), get_outer_border_color(loc.node));
 	} else {
 		if (c->state == STATE_PSEUDO_TILED) {
 			width = c->floating_rectangle.width;
