@@ -79,7 +79,7 @@ bool ignore_ewmh_position;
 state_transition_t ignore_ewmh_fullscreen;
 
 bool center_pseudo_tiled;
-int honor_size_hints;
+uint8_t honor_size_hints;
 
 bool remove_disabled_monitors;
 bool remove_unplugged_monitors;
