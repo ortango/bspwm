@@ -434,13 +434,14 @@ void parse_key_value(char *key, char *value, rule_consequence_t *csq)
 			csq->rect = NULL;
 		}
 	} else if (parse_bool(value, &v)) {
-		if (streq("hidden", key)) {
-			csq->hidden = v;
+		if (streq("collapsed", key)) {
+			csq->collapsed = v;
 		}
 #define SETCSQ(name) \
 		else if (streq(#name, key)) { \
 			csq->name = v; \
 		}
+		SETCSQ(hidden)
 		SETCSQ(sticky)
 		SETCSQ(private)
 		SETCSQ(locked)

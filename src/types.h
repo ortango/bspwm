@@ -367,6 +367,7 @@ typedef struct {
 	stack_layer_t *layer;
 	client_state_t *state;
 	bool hidden;
+	bool collapsed;
 	bool sticky;
 	bool private;
 	bool locked;
