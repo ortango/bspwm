@@ -349,7 +349,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 					set_collapsed(trg.monitor, trg.desktop, trg.node, (a == ALTER_SET ? b : !trg.node->collapsed));
 					changed = true;
 				} else {
-					fail(rsp, "node %s: Collapsed can only be set on internal nodes.\n", *(args - 1));
+					trg.node->collapsed = (a == ALTER_SET ? b : !trg.node->collapsed);
 				}
 			} else if (streq("sticky", key)) {
 				set_sticky(trg.monitor, trg.desktop, trg.node, (a == ALTER_SET ? b : !trg.node->sticky));
