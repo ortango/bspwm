@@ -447,6 +447,14 @@ node_t *insert_node(monitor_t *m, desktop_t *d, node_t *n, node_t *f)
 		}
 	}
 
+#define PROPAGATE_COLLAPSED(t) \
+			if (is_leaf(t) && t->collapsed) { \
+				t->collapsed = false; \
+				set_collapsed(m, d, t->parent, true); \
+			}
+			PROPAGATE_COLLAPSED(f)
+			PROPAGATE_COLLAPSED(n)
+#undef PROPAGATE_COLLAPSED
 	propagate_flags_upward(m, d, n);
 
 	if (d->focus == NULL && is_focusable(n)) {
@@ -2146,7 +2154,7 @@ void propagate_hidden_upward(monitor_t *m, desktop_t *d, node_t *n)
 
 void set_collapsed(monitor_t *m, desktop_t *d, node_t *n, bool value)
 {
-	if (n == NULL || is_leaf(n) || n->collapsed == value) {
+	if (n == NULL || n->collapsed == value) {
 		return;
 	}
 	

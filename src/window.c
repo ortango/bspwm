@@ -163,6 +163,10 @@ bool manage_window(xcb_window_t win, rule_consequence_t *csq, int fd)
 		n->vacant = true;
 	}
 
+	if (csq->collapsed) {
+		n->collapsed = true;
+	}
+
 	f = insert_node(m, d, n, f);
 	clients_count++;
 	if (single_monocle && d->layout == LAYOUT_MONOCLE && tiled_count(d->root, true) > 1) {
