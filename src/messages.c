@@ -347,10 +347,10 @@ void cmd_node(char **args, int num, FILE *rsp)
 			} else if (streq("collapsed", key)) {
 				if (!is_leaf(trg.node)) {
 					set_collapsed(trg.monitor, trg.desktop, trg.node, (a == ALTER_SET ? b : !trg.node->collapsed));
-					changed = true;
 				} else {
 					trg.node->collapsed = (a == ALTER_SET ? b : !trg.node->collapsed);
 				}
+				changed = true;
 			} else if (streq("sticky", key)) {
 				set_sticky(trg.monitor, trg.desktop, trg.node, (a == ALTER_SET ? b : !trg.node->sticky));
 			} else if (streq("private", key)) {
