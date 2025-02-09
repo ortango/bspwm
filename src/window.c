@@ -163,9 +163,7 @@ bool manage_window(xcb_window_t win, rule_consequence_t *csq, int fd)
 		n->vacant = true;
 	}
 
-	if (csq->collapsed) {
-		n->collapsed = true;
-	}
+	set_collapsed(m, d, n, csq->collapsed);
 
 	f = insert_node(m, d, n, f);
 	clients_count++;
