@@ -447,7 +447,7 @@ node_t *insert_node(monitor_t *m, desktop_t *d, node_t *n, node_t *f)
 
 #define PROPAGATE_COLLAPSED(t) \
 			if (is_leaf(t) && t->collapsed) { \
-				t->collapsed = false; \
+				set_collapsed(m, d, t, false); \
 				set_collapsed(m, d, t->parent, true); \
 			}
 			PROPAGATE_COLLAPSED(f)
@@ -2146,7 +2146,7 @@ void set_collapsed(monitor_t *m, desktop_t *d, node_t *n, bool value)
 	
 	n->collapsed = value;
 	
-	put_status(SBSC_MASK_NODE_FLAG, "node_flag 0x%08X 0x%08X 0x%08X collapsed %s\n", m->id, d->id, n->id, ON_OFF_STR(value));
+	put_status(SBSC_MASK_NODE_FLAG, "node_flag 0x%08X 0x%08X 0x%08X %s %s\n", m->id, d->id, n->id, (is_leaf(n) ? "collapsed_pending" : "collapsed"), ON_OFF_STR(value));
 }
 
 void set_sticky(monitor_t *m, desktop_t *d, node_t *n, bool value)
