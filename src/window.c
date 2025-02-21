@@ -466,6 +466,7 @@ void window_draw_border(xcb_window_t win, uint32_t border_color_pxl, uint32_t ou
 	values[0] = pmap;
 	xcb_change_window_attributes(dpy,win, XCB_CW_BORDER_PIXMAP,&values[0]);
 
+	free(geo);
 	xcb_free_pixmap(dpy,pmap);
 	xcb_free_gc(dpy,gc);
 	xcb_flush(dpy);
