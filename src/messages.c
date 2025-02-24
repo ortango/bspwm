@@ -383,9 +383,7 @@ void cmd_node(char **args, int num, FILE *rsp)
 						cancel_presel(trg.monitor, trg.desktop, trg.node);
 					} else {
 						presel_dir(trg.monitor, trg.desktop, trg.node, dir);
-						if (!IS_RECEPTACLE(trg.node)) {
-							draw_presel_feedback(trg.monitor, trg.desktop, trg.node);
-						}
+						draw_presel_feedback(trg.monitor, trg.desktop, trg.node);
 					}
 				} else {
 					fail(rsp, "node %s: Invalid argument: '%s%s'.\n", *(args - 1), alternate?"~":"", *args);
