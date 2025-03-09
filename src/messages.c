@@ -920,6 +920,23 @@ void cmd_monitor(char **args, int num, FILE *rsp)
 			}
 			remove_monitor(trg.monitor);
 			return;
+		} else if (streq("-h", *args) || streq("--hide", *args)) {
+			if (num > 1) {
+				fail(rsp, "monitor %s: Trailing commands.\n", *args);
+				return;
+			}
+			if (mon_head == mon_tail) {
+				fail(rsp, "");
+				return;
+			}
+			monitor_t *last_mon = mon;
+			unlink_monitor(trg.monitor);
+			if (mon_ignored != NULL)
+				trg.monitor->next = mon_ignored;
+			mon_ignored = trg.monitor;
+			if (mon != last_mon)
+				focus_node(mon_head, NULL, NULL);
+			return;
 		} else if (streq("-o", *args) || streq("--reorder-desktops", *args)) {
 			num--, args++;
 			if (num < 1) {
@@ -1277,6 +1294,30 @@ void cmd_wm(char **args, int num, FILE *rsp)
 			} else {
 				fail(rsp, "wm %s: Invalid argument: '%s'.\n", *(args - 1), *args);
 				break;
+			}
+		} else if (streq("-u", *args) || streq("--unhide-monitor", *args)) {
+			num--, args++;
+			monitor_t *m = mon_ignored;
+			if (*args != NULL) {
+				uint32_t hiddentarget;
+				if (!parse_id(*args, &hiddentarget)) {
+					fail(rsp, "wm %s: Invalid argument: '%s'.\n", *(args - 1), *args);
+					break;
+				}
+				for (m = mon_ignored; m != NULL; m = m->next) {
+					if (m->id == hiddentarget)
+						break;
+				}
+			}
+			if (m != NULL) {
+				if (mon_ignored == m)
+					mon_ignored = m->next;
+				if (m->prev != NULL)
+					m->prev->next = m->next;
+				if (m->next != NULL)
+					m->next->prev = m->prev;
+				m->next = m->prev = NULL;
+				add_monitor(m);
 			}
 		} else if (streq("-O", *args) || streq("--reorder-monitors", *args)) {
 			num--, args++;

@@ -61,6 +61,7 @@ extern monitor_t *mon;
 extern monitor_t *mon_head;
 extern monitor_t *mon_tail;
 extern monitor_t *pri_mon;
+extern monitor_t *mon_ignored;
 extern history_t *history_head;
 extern history_t *history_tail;
 extern history_t *history_needle;

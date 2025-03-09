@@ -64,6 +64,7 @@ monitor_t *mon;
 monitor_t *mon_head;
 monitor_t *mon_tail;
 monitor_t *pri_mon;
+monitor_t *mon_ignored;
 history_t *history_head;
 history_t *history_tail;
 history_t *history_needle;
